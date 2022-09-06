@@ -10,5 +10,5 @@ interface TimeZoneHelper {
     fun hoursFromTimeZone(otherTimeZoneId: String): Double
     fun getTime(timeZoneID: String): String
     fun getDate(timeZoneID: String): String
-    fun search(strHour: Int, endHour: Int, timeZoneStrings: List<String>): List<Int>
+    fun search(startHour: Int, endHour: Int, timeZoneStrings: List<String>): List<Int>
 }

@@ -1,7 +1,11 @@
 package me.kifio.findtime
 
+import io.github.aakira.napier.Napier
 import kotlinx.datetime.*
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.time.Duration.Companion.hours
 
 class TimeZoneHelperImpl : TimeZoneHelper {
 
@@ -19,6 +23,8 @@ class TimeZoneHelperImpl : TimeZoneHelper {
     override fun currentTime(): String = formatDateTime(
         Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
     )
+
+    override fun currentTimeZone(): String = TimeZone.currentSystemDefault().toString()
 
     override fun hoursFromTimeZone(otherTimeZoneId: String): Double {
         val currentTimeZone = TimeZone.currentSystemDefault()
@@ -42,8 +48,68 @@ class TimeZoneHelperImpl : TimeZoneHelper {
         } ${dateTime.date.dayOfMonth}"
     }
 
-    override fun search(strHour: Int, endHour: Int, timeZoneStrings: List<String>): List<Int> {
-        TODO("Not yet implemented")
+    override fun search(startHour: Int, endHour: Int, timeZoneStrings: List<String>): List<Int> {
+        val goodHours = mutableListOf<Int>()
+        val timeRange = IntRange(max(0, startHour), min(23, endHour))
+        val currentTimezone = TimeZone.currentSystemDefault()
+
+        for (hour in timeRange) {
+            var isGoodHour = false
+            for (zone in timeZoneStrings) {
+                val timeZone = TimeZone.of(zone)
+
+                if (timeZone == currentTimezone) {
+                    continue
+                }
+
+                if (!isValid(timeRange = timeRange, hour = hour, currentTimezone = currentTimezone, otherTimeZone = timeZone)) {
+                    Napier.d("Hour $hour is not valid for time range")
+                    isGoodHour = false
+                    break
+                } else {
+                    Napier.d("Hour $hour is valid for time range")
+                    isGoodHour = true
+                }
+            }
+
+            if (isGoodHour) {
+                goodHours.add(hour)
+            }
+        }
+
+        return goodHours
+    }
+
+    private fun isValid(
+        timeRange: IntRange,
+        hour: Int,
+        currentTimezone: TimeZone,
+        otherTimeZone: TimeZone
+    ): Boolean {
+        if (hour !in timeRange) {
+            return false
+        }
+
+        val currentUTCInstant: Instant = Clock.System.now()
+
+        val currentOtherDateTime = currentUTCInstant.toLocalDateTime(otherTimeZone)
+
+        val otherDateTimeWithHour = LocalDateTime(
+            currentOtherDateTime.year,
+            currentOtherDateTime.monthNumber,
+            currentOtherDateTime.dayOfMonth,
+            hour,
+            0,
+            0,
+            0
+        )
+
+        val localInstant = otherDateTimeWithHour.toInstant(currentTimezone)
+
+        val convertedTime = localInstant.toLocalDateTime(otherTimeZone)
+
+        Napier.d("Hour $hour in Time Range ${otherTimeZone.id} is ${convertedTime.hour}")
+        return convertedTime.hour in timeRange
     }
 
 }

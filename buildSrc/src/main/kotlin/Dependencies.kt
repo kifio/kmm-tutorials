@@ -23,7 +23,7 @@ object Versions {
     const val coroutines = "1.6.21"
     const val junit = "4.13.2"
     const val material = "1.6.1"
-    const val kotlinxDateTime = "0.3.1"
+    const val kotlinxDateTime = "0.3.3"
     const val activity_compose = "1.4.0"
     const val napier = "2.1.0"
     const val junit5 = "1.5.10"
