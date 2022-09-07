@@ -43,7 +43,7 @@ val bottomNavigationItems = listOf(
 )
 
 @Composable
-fun MainView(actionBar: topBarFun = { emptyComposable() }) {
+fun MainView(actionBar: topBarFun = { EmptyComposable() }) {
     val showAddDialog = remember { mutableStateOf(false) }
     val currentTimezoneStrings = remember { SnapshotStateList<String>() }
     val selectedIndex = remember { mutableStateOf(0) }
@@ -83,7 +83,25 @@ fun MainView(actionBar: topBarFun = { emptyComposable() }) {
                 }
             }
         ) {
+            if (showAddDialog.value) {
+                AddTimeZoneDialog(
+                    onAdd = { newTimezones ->
+                        showAddDialog.value = false
+                        for (zone in newTimezones) {
+                         if (!currentTimezoneStrings.contains(zone)) {
+                             currentTimezoneStrings.add(zone)
+                         }
+                        }
+                    }, onDismiss = {
+                        showAddDialog.value = false
+                    }
+                )
+            }
 
+            when (selectedIndex.value) {
+                0 -> TimeZoneScreen(currentTimezoneStrings)
+                else-> FindMeetingScreen(currentTimezoneStrings)
+            }
         }
     }
 }

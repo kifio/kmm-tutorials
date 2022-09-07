@@ -25,8 +25,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
-@Composable
-fun showName(text: String) {
-    Text(text)
-}
