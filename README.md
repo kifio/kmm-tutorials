@@ -7,3 +7,4 @@
 ![image](https://github.com/kifio/kmm-tutorials/blob/master/FindTime/Preview-Desktop.png)
 
 # Organize
+Работа с плтформозависимым кодом. expect/actual классы.
