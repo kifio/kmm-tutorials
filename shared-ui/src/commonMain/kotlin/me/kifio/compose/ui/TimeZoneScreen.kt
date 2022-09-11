@@ -1,4 +1,4 @@
-package me.kifio.findtime.android.ui
+package me.kifio.compose.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,13 +14,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-
-import kotlinx.coroutines.delay
 import me.kifio.findtime.TimeZoneHelper
 import me.kifio.findtime.TimeZoneHelperImpl
+import kotlinx.coroutines.delay
+
+const val timeMillis = 1000 * 60L // 1 second
 
 @Composable
-fun TimeZoneScreen(currentTimezoneStrings: SnapshotStateList<String>) {
+fun TimeZoneScreen(
+    currentTimezoneStrings: SnapshotStateList<String>
+) {
     val timezoneHelper: TimeZoneHelper = TimeZoneHelperImpl()
     val listState = rememberLazyListState()
     Column(
@@ -31,7 +34,7 @@ fun TimeZoneScreen(currentTimezoneStrings: SnapshotStateList<String>) {
         LaunchedEffect(Unit) {
             while (true) {
                 time = timezoneHelper.currentTime()
-                delay(1000 * 60L) // Every minute
+                delay(timeMillis) // Every minute
             }
         }
         LocalTimeCard(

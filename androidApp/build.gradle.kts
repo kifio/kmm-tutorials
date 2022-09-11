@@ -24,10 +24,20 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose_compiler_version
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget="11"
+    }
 }
 
 dependencies {
     implementation(project(":shared"))
+    implementation(project(":shared-ui"))
 
     implementation(Deps.napier)
     implementation(Deps.material)

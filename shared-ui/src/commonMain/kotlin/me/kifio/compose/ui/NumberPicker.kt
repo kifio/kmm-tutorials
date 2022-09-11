@@ -1,6 +1,7 @@
-package me.kifio.findtime.android.ui
+package me.kifio.compose.ui
 
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.draggable
@@ -56,6 +57,7 @@ fun NumberPicker(
     val animatedStateValue = animatedStateValue(animatedOffset.value)
 
     Column(
+
         modifier = modifier
             .wrapContentSize()
             .draggable(

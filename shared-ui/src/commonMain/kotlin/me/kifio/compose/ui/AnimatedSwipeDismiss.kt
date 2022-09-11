@@ -1,4 +1,4 @@
-package me.kifio.findtime.android.ui
+package me.kifio.compose.ui
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween

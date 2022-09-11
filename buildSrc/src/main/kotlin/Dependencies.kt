@@ -12,18 +12,18 @@ object Versions {
     const val compile_sdk = 32
 
     // Plugins
-    const val kotlin = "1.7.10"
-    const val kotlin_gradle_plugin = "1.7.10"
+    const val kotlin = "1.6.10"
+    const val kotlin_gradle_plugin = "1.6.10"
     const val android_gradle_plugin = "7.2.2"
     const val desktop_compose_plugin = "1.1.1"
-    const val compose_compiler_version = "1.3.0"
+    const val compose_compiler_version = "1.1.0-rc02"
     const val compose_version = "1.2.1"
 
     // Libs
-    const val coroutines = "1.6.21"
+    const val coroutines = "1.6.4"
     const val junit = "4.13.2"
     const val material = "1.6.1"
-    const val kotlinxDateTime = "0.3.3"
+    const val kotlinxDateTime = "0.3.2"
     const val activity_compose = "1.4.0"
     const val napier = "2.1.0"
     const val junit5 = "1.5.10"

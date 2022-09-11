@@ -1,7 +1,5 @@
-package me.kifio.findtime.android.ui
+package me.kifio.compose.ui
 
-import android.app.ActionBar
-import android.widget.ImageView
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -13,13 +11,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import me.kifio.findtime.android.theme.AppTheme
-import me.kifio.findtime.android.ui.BottomNavigationItem
+import me.kifio.compose.theme.AppTheme
 
 sealed class Screen(val title: String) {
-    object TimeZoneScreen : Screen("Timezones")
+    object TimeZonesScreen : Screen("Timezones")
     object FindTimeScreen : Screen("Find Time")
 }
 
@@ -31,7 +29,7 @@ data class BottomNavigationItem(
 
 val bottomNavigationItems = listOf(
     BottomNavigationItem(
-        Screen.TimeZoneScreen.title,
+        Screen.TimeZonesScreen.title,
         Icons.Filled.Language,
         "Timezones"
     ),
@@ -43,21 +41,23 @@ val bottomNavigationItems = listOf(
 )
 
 @Composable
-fun MainView(actionBar: topBarFun = { EmptyComposable() }) {
+fun MainView(actionBarFun: topBarFun = { EmptyComposable() }) {
     val showAddDialog = remember { mutableStateOf(false) }
     val currentTimezoneStrings = remember { SnapshotStateList<String>() }
     val selectedIndex = remember { mutableStateOf(0) }
-
     AppTheme {
         Scaffold(
             topBar = {
-                actionBar(selectedIndex.value)
+                actionBarFun(selectedIndex.value)
             },
             floatingActionButton = {
                 if (selectedIndex.value == 0) {
                     FloatingActionButton(
-                        modifier = Modifier.padding(16.dp),
-                        onClick = { showAddDialog.value = true }
+                        modifier = Modifier
+                            .padding(16.dp),
+                        onClick = {
+                            showAddDialog.value = true
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
@@ -67,17 +67,26 @@ fun MainView(actionBar: topBarFun = { EmptyComposable() }) {
                 }
             },
             bottomBar = {
-                BottomNavigation {
-                    bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
+                BottomNavigation(
+                    backgroundColor = MaterialTheme.colors.primary
+                ) {
+                    bottomNavigationItems.forEachIndexed { i, bottomNavigationitem ->
                         BottomNavigationItem(
+                            selectedContentColor = Color.White,
+                            unselectedContentColor = Color.Black,
+                            label = {
+                                Text(bottomNavigationitem.route, style = MaterialTheme.typography.h4)
+                            },
                             icon = {
                                 Icon(
-                                    imageVector = bottomNavigationItem.icon,
-                                    contentDescription = bottomNavigationItem.iconContentDescription
+                                    bottomNavigationitem.icon,
+                                    contentDescription = bottomNavigationitem.iconContentDescription
                                 )
                             },
-                            selected = selectedIndex.value == index,
-                            onClick = { selectedIndex.value = index }
+                            selected = selectedIndex.value == i,
+                            onClick = {
+                                selectedIndex.value = i
+                            }
                         )
                     }
                 }
@@ -88,20 +97,21 @@ fun MainView(actionBar: topBarFun = { EmptyComposable() }) {
                     onAdd = { newTimezones ->
                         showAddDialog.value = false
                         for (zone in newTimezones) {
-                         if (!currentTimezoneStrings.contains(zone)) {
-                             currentTimezoneStrings.add(zone)
-                         }
+                            if (!currentTimezoneStrings.contains(zone)) {
+                                currentTimezoneStrings.add(zone)
+                            }
                         }
-                    }, onDismiss = {
+                    },
+                    onDismiss = {
                         showAddDialog.value = false
-                    }
+                    },
                 )
             }
-
             when (selectedIndex.value) {
                 0 -> TimeZoneScreen(currentTimezoneStrings)
-                else-> FindMeetingScreen(currentTimezoneStrings)
+                 1 -> FindMeetingScreen(currentTimezoneStrings)
             }
         }
     }
 }
+

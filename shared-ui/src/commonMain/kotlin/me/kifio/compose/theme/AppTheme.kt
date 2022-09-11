@@ -1,4 +1,4 @@
-package me.kifio.findtime.android.theme
+package me.kifio.compose.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

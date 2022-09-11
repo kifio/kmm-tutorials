@@ -1,7 +1,14 @@
-package me.kifio.findtime.android.ui
+package me.kifio.compose.ui
 
-import android.widget.Space
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -14,46 +21,59 @@ import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import me.kifio.findtime.TimeZoneHelper
 import me.kifio.findtime.TimeZoneHelperImpl
 
-
 @Composable
-fun FindMeetingScreen(timezoneStrings: List<String>) {
+fun FindMeetingScreen(
+    timezoneStrings: List<String>
+) {
     val listState = rememberLazyListState()
-    val startTime = remember { mutableStateOf(8) }
-    val endTime = remember { mutableStateOf(17) }
+    // 8am
+    val startTime = remember {
+        mutableStateOf(8)
+    }
+    // 5pm
+    val endTime = remember {
+        mutableStateOf(17)
+    }
     val selectedTimeZones = remember {
         val selected = SnapshotStateMap<Int, Boolean>()
-        for (i in timezoneStrings.indices) {
-            selected[i] = true
-        }
-
+        for (i in 0..timezoneStrings.size-1) selected[i] = true
         selected
     }
-
-    val timeZoneHelper = TimeZoneHelperImpl()
+    val timezoneHelper: TimeZoneHelper = TimeZoneHelperImpl()
     val showMeetingDialog = remember { mutableStateOf(false) }
     val meetingHours = remember { SnapshotStateList<Int>() }
 
     if (showMeetingDialog.value) {
-        MeetingDialog(hours = meetingHours, onDismiss = {
-            showMeetingDialog.value = false
-        })
+        MeetingDialog(
+            hours = meetingHours,
+            onDismiss = {
+                showMeetingDialog.value = false
+            }
+        )
     }
-
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         Spacer(modifier = Modifier.size(16.dp))
         Text(
-            modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(Alignment.CenterHorizontally),
             text = "Time Range",
             style = MaterialTheme.typography.h6
         )
         Spacer(modifier = Modifier.size(16.dp))
         Row(
-            modifier = Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp).wrapContentWidth(
-                Alignment.CenterHorizontally
-            )
-        ) {
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 4.dp, end = 4.dp)
+                .wrapContentWidth(Alignment.CenterHorizontally),
+
+            ) {
             Spacer(modifier = Modifier.size(16.dp))
             NumberTimeCard("Start", startTime)
             Spacer(modifier = Modifier.size(32.dp))
@@ -88,8 +108,8 @@ fun FindMeetingScreen(timezoneStrings: List<String>) {
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),
-                    color = MaterialTheme.colors.background
-                ) {
+                     color = MaterialTheme.colors.background
+                    ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -114,18 +134,18 @@ fun FindMeetingScreen(timezoneStrings: List<String>) {
         ) {
             OutlinedButton(
                 colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colors.primary,
-                    contentColor = MaterialTheme.colors.secondaryVariant),
+                contentColor = MaterialTheme.colors.secondaryVariant),
                 onClick = {
-                    meetingHours.clear()
-                    meetingHours.addAll(
-                        timeZoneHelper.search(
-                            startTime.value,
-                            endTime.value,
-                            getSelectedTimeZones(timezoneStrings, selectedTimeZones)
-                        )
+                meetingHours.clear()
+                meetingHours.addAll(
+                    timezoneHelper.search(
+                        startTime.value,
+                        endTime.value,
+                        getSelectedTimeZones(timezoneStrings, selectedTimeZones)
                     )
-                    showMeetingDialog.value = true
-                }) {
+                )
+                showMeetingDialog.value = true
+            }) {
                 Text("Search")
             }
         }

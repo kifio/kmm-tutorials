@@ -5,10 +5,8 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import me.kifio.findtime.android.ui.MainView
-
+import me.kifio.compose.ui.MainView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
