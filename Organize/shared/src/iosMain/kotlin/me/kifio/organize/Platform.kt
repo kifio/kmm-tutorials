@@ -34,8 +34,53 @@
 
 package me.kifio.organize
 
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.ptr
+import platform.CoreGraphics.CGRectGetHeight
+import platform.CoreGraphics.CGRectGetWidth
+import platform.Foundation.NSLog
+import platform.Foundation.NSString
+import platform.Foundation.NSUTF8StringEncoding
+import platform.Foundation.stringWithCString
 import platform.UIKit.UIDevice
+import platform.UIKit.UIScreen
+import platform.posix.uname
+import platform.posix.utsname
+
+actual class ScreenInfo actual constructor() {
+    actual val width: Int
+        get() = CGRectGetWidth(UIScreen.mainScreen.nativeBounds).toInt()
+
+    actual val height: Int
+        get() = CGRectGetHeight(UIScreen.mainScreen.nativeBounds).toInt()
+
+    actual val density: Int
+        get() = UIScreen.mainScreen.scale.toInt()
+}
 
 actual class Platform actual constructor() {
-    actual val platform: String = UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
+
+    actual val osName: String
+        get() = (UIDevice.currentDevice.name)
+
+    actual val osVersion: String
+        get() = UIDevice.currentDevice.systemVersion
+
+    actual val deviceModel: String
+        get() {
+            memScoped {
+                val systemInfo: utsname = alloc()
+                uname(systemInfo.ptr)
+                return NSString.stringWithCString(
+                    systemInfo.machine,
+                    encoding = NSUTF8StringEncoding
+                ) ?: noInfoAvailable
+            }
+        }
+
+    actual val cpuType: String
+        get() = kotlin.native.Platform.cpuArchitecture.name
+
+    actual val screen: ScreenInfo? = ScreenInfo()
 }

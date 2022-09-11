@@ -32,7 +32,7 @@
  * THE SOFTWARE.
  */
 
-package me.kifio.organize.android.ui.theme
+package me.kifio.organize.android.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

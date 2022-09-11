@@ -32,7 +32,7 @@
  * THE SOFTWARE.
  */
 
-package me.kifio.organize.android.ui.root
+package me.kifio.organize.android.root
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -43,14 +43,14 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun AppScaffold() {
-  val navController = rememberNavController()
+    val navController = rememberNavController()
 
-  Scaffold {
-    AppNavHost(
-      navController = navController,
-      modifier = Modifier
-        .fillMaxSize()
-        .padding(it)
-    )
-  }
+    Scaffold {
+        AppNavHost(
+            navController = navController,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        )
+    }
 }

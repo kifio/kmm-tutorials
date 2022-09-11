@@ -32,7 +32,7 @@
  * THE SOFTWARE.
  */
 
-package me.kifio.organize.android.ui.root
+package me.kifio.organize.android.root
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -40,7 +40,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import me.kifio.organize.android.R
-import me.kifio.organize.android.ui.theme.AppTheme
+import me.kifio.organize.android.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {

@@ -34,6 +34,25 @@
 
 package me.kifio.organize
 
+actual class ScreenInfo actual constructor() {
+    actual val width = 0
+    actual val height = 0
+    actual val density = 0
+}
+
 actual class Platform actual constructor() {
-  actual val platform: String = "Desktop"
+
+    actual val osName: String
+        get() = System.getProperty("os.name") ?: "Desktop"
+
+    actual val osVersion: String
+        get() = System.getProperty("os.version") ?: noInfoAvailable
+
+    actual val deviceModel: String
+        get() = "Desktop"
+
+    actual val cpuType: String
+        get() = System.getProperty("os.arch") ?: noInfoAvailable
+
+    actual val screen: ScreenInfo? = null
 }

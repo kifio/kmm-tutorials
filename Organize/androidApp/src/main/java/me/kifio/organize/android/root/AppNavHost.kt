@@ -32,37 +32,37 @@
  * THE SOFTWARE.
  */
 
-package me.kifio.organize.android.ui.root
+package me.kifio.organize.android.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import me.kifio.organize.android.ui.about.AboutView
-import me.kifio.organize.android.ui.reminders.RemindersView
+import me.kifio.organize.android.about.AboutView
+import me.kifio.organize.android.reminders.RemindersView
 import me.kifio.organize.presentation.Screen
 
 @Composable
 fun AppNavHost(
-  navController: NavHostController,
-  modifier: Modifier = Modifier,
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
 ) {
-  NavHost(
-    navController = navController,
-    startDestination = Screen.Reminders.route,
-    modifier = modifier,
-  ) {
-    composable(Screen.Reminders.route) {
-      RemindersView(
-        onAboutButtonClick = { navController.navigate(Screen.AboutDevice.route) }
-      )
-    }
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Reminders.route,
+        modifier = modifier,
+    ) {
+        composable(Screen.Reminders.route) {
+            RemindersView(
+                onAboutButtonClick = { navController.navigate(Screen.AboutDevice.route) }
+            )
+        }
 
-    composable(Screen.AboutDevice.route) {
-      AboutView(
-        onUpButtonClick = { navController.popBackStack() }
-      )
+        composable(Screen.AboutDevice.route) {
+            AboutView(
+                onUpButtonClick = { navController.popBackStack() }
+            )
+        }
     }
-  }
 }

@@ -44,7 +44,7 @@
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
         <activity
-          android:name=".ui.root.MainActivity"
+          android:name=".root.MainActivity"
           android:exported="true"
           android:theme="@style/SplashTheme">
             <intent-filter>

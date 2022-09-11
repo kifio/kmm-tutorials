@@ -32,52 +32,93 @@
  * THE SOFTWARE.
  */
 
-package me.kifio.organize.android.ui.about
+package me.kifio.organize.android.about
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import me.kifio.organize.Platform
+import me.kifio.organize.screenInfo
 
 @Composable
 fun AboutView(
-  onUpButtonClick: () -> Unit
+    onUpButtonClick: () -> Unit
 ) {
-  Column {
-    Toolbar(onUpButtonClick = onUpButtonClick)
-    ContentView()
-  }
+    Column {
+        Toolbar(onUpButtonClick = onUpButtonClick)
+        ContentView()
+    }
 }
 
 @Composable
 private fun Toolbar(
-  onUpButtonClick: () -> Unit,
+    onUpButtonClick: () -> Unit,
 ) {
-  TopAppBar(
-    title = { Text(text = "About Device") },
-    navigationIcon = {
-      IconButton(onClick = onUpButtonClick) {
-        Icon(
-          imageVector = Icons.Default.ArrowBack,
-          contentDescription = "Up Button",
-        )
-      }
-    }
-  )
+    TopAppBar(
+        title = { Text(text = "About Device") },
+        navigationIcon = {
+            IconButton(onClick = onUpButtonClick) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Up Button",
+                )
+            }
+        }
+    )
 }
 
 @Composable
 private fun ContentView() {
+    val items = makeItems()
+
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(items) { row -> RowView(title = row.first, subtitle = row.second) }
+    }
+}
+
+@Composable
+private fun RowView(title: String, subtitle: String) {
+  Column(modifier = Modifier.fillMaxWidth()) {
+    Column(Modifier.padding(8.dp)) {
+      Text(
+        text = title,
+        style = MaterialTheme.typography.caption,
+        color = Color.Gray,
+      )
+      Text(
+        text = subtitle,
+        style = MaterialTheme.typography.body1,
+      )
+    }
+    Divider()
+  }
+}
+
+private fun makeItems(): List<Pair<String, String>> {
+    val platform = Platform()
+    return mutableListOf(
+        "Os" to "${platform.osName} ${platform.osVersion}",
+        "Device" to platform.deviceModel,
+        "CPU" to platform.cpuType,
+    ).apply {
+        platform.screen?.let { add("Display" to platform.screenInfo) }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun AboutPreview() {
-  AboutView {
-  }
+    AboutView {
+    }
 }

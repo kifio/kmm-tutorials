@@ -32,7 +32,7 @@
  * THE SOFTWARE.
  */
 
-package me.kifio.organize.android.ui.theme
+package me.kifio.organize.android.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

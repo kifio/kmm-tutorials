@@ -32,7 +32,7 @@
  * THE SOFTWARE.
  */
 
-package me.kifio.organize.android.ui.reminders
+package me.kifio.organize.android.reminders
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

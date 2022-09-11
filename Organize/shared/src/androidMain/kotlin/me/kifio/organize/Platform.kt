@@ -37,6 +37,7 @@ package me.kifio.organize
 import android.content.res.Resources
 import android.os.Build
 import android.util.DisplayMetrics
+import android.util.Log
 import kotlin.math.roundToInt
 
 actual class ScreenInfo actual constructor() {
@@ -66,11 +67,7 @@ actual class Platform actual constructor() {
         get() = "${Build.MANUFACTURER} ${Build.MODEL}"
 
     actual val cpuType: String
-        get() = Build.SUPPORTED_ABIS.firstOrNull() ?: "no-info-available"
+        get() = Build.SUPPORTED_ABIS.firstOrNull() ?: noInfoAvailable
 
-    actual val screen: ScreenInfo?
-        get() = ScreenInfo()
-
-    actual fun logSystemInfo() {
-    }
+    actual val screen: ScreenInfo? = ScreenInfo()
 }

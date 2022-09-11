@@ -43,6 +43,7 @@ expect class ScreenInfo() {
 }
 
 expect class Platform() {
+
     val osName: String
     val osVersion: String
 
@@ -50,6 +51,27 @@ expect class Platform() {
     val cpuType: String
 
     val screen: ScreenInfo?
-
-    fun logSystemInfo()
 }
+
+fun Platform.logSystemInfo(logLevel: LogLevel) {
+    CommonLogger.log(LogLevel.INFO, "kifio-Platform", deviceInfo)
+}
+
+val Platform.screenInfo: String
+    get() {
+        return screen?.let { "${it.width}x${it.height}@${it.density}x scale;" } ?: ""
+    }
+
+val Platform.deviceInfo: String
+    get() {
+        val sb = StringBuilder("($osName; $osVersion; $deviceModel;")
+
+        if (screen != null) { sb.append(" $screenInfo") }
+
+        return sb.append(" $cpuType)").toString()
+    }
+
+val Platform.noInfoAvailable: String
+    get() {
+        return "no-info-available"
+    }
