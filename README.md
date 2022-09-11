@@ -5,3 +5,5 @@
 # FindTime
 Азы. Модульность, buildSrc, работа с зависимостями.
 ![image](https://github.com/kifio/kmm-tutorials/blob/master/FindTime/Preview-Desktop.png)
+
+# Organize
