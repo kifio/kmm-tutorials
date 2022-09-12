@@ -49,15 +49,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import me.kifio.organize.Platform
+import me.kifio.organize.presentation.AboutViewModel
 import me.kifio.organize.screenInfo
 
 @Composable
 fun AboutView(
+    viewModel: AboutViewModel = AboutViewModel(),
     onUpButtonClick: () -> Unit
 ) {
     Column {
         Toolbar(onUpButtonClick = onUpButtonClick)
-        ContentView()
+        ContentView(viewModel.items)
     }
 }
 
@@ -79,40 +81,27 @@ private fun Toolbar(
 }
 
 @Composable
-private fun ContentView() {
-    val items = makeItems()
-
+private fun ContentView(items: List<AboutViewModel.RowItem>) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(items) { row -> RowView(title = row.first, subtitle = row.second) }
+        items(items) { row -> RowView(title = row.title, subtitle = row.subtitle) }
     }
 }
 
 @Composable
 private fun RowView(title: String, subtitle: String) {
-  Column(modifier = Modifier.fillMaxWidth()) {
-    Column(Modifier.padding(8.dp)) {
-      Text(
-        text = title,
-        style = MaterialTheme.typography.caption,
-        color = Color.Gray,
-      )
-      Text(
-        text = subtitle,
-        style = MaterialTheme.typography.body1,
-      )
-    }
-    Divider()
-  }
-}
-
-private fun makeItems(): List<Pair<String, String>> {
-    val platform = Platform()
-    return mutableListOf(
-        "Os" to "${platform.osName} ${platform.osVersion}",
-        "Device" to platform.deviceModel,
-        "CPU" to platform.cpuType,
-    ).apply {
-        platform.screen?.let { add("Display" to platform.screenInfo) }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(8.dp)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.caption,
+                color = Color.Gray,
+            )
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.body1,
+            )
+        }
+        Divider()
     }
 }
 

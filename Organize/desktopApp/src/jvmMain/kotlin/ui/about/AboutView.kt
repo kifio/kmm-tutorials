@@ -47,41 +47,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import me.kifio.organize.Platform
+import me.kifio.organize.presentation.AboutViewModel
 import me.kifio.organize.screenInfo
 
 @Composable
-fun AboutView() {
-    ContentView()
+fun AboutView(viewModel: AboutViewModel = AboutViewModel()) {
+    ContentView(viewModel.items)
 }
 
 @Composable
-private fun ContentView() {
-    val items = makeItems()
+private fun ContentView(items: List<AboutViewModel.RowItem>) {
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
     ) {
         items(items) { row ->
-            RowView(title = row.first, subtitle = row.second)
+            RowView(title = row.title, subtitle = row.subtitle)
         }
     }
-}
-
-private fun makeItems(): List<Pair<String, String>> {
-
-    val platform = Platform()
-
-    val items = mutableListOf(
-        "Operating System" to "${platform.osName} ${platform.osVersion}",
-        "Device" to platform.deviceModel,
-        "CPU" to platform.cpuType
-    )
-
-    platform.screen?.let {
-        items.add(Pair("Display", platform.screenInfo))
-    }
-
-    return items
 }
 
 @Composable
