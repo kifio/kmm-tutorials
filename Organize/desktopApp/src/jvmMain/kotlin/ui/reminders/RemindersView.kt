@@ -61,12 +61,13 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import koin
 import me.kifio.organize.data.Reminder
 import me.kifio.organize.presentation.RemindersViewModel
 
 @Composable
 fun RemindersView(
-    remindersViewModel: RemindersViewModel = RemindersViewModel(),
+    remindersViewModel: RemindersViewModel = koin.get(),
     onAboutIconClick: () -> Unit,
 ) {
     Column {

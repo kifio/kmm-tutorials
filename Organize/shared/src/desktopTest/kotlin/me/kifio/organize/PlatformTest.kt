@@ -1,6 +1,7 @@
 package me.kifio.organize
 
 import kotlin.test.Test
+import kotlin.test.assertTrue
 
 actual class PlatformTest {
     private val platform = Platform()

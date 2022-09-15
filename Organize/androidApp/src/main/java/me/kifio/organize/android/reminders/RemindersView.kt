@@ -62,10 +62,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import me.kifio.organize.data.Reminder
 import me.kifio.organize.presentation.RemindersViewModel
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun RemindersView(
-    remindersViewModel: RemindersViewModel = RemindersViewModel(),
+    remindersViewModel: RemindersViewModel = getViewModel(),
     onAboutButtonClick: () -> Unit,
 ) {
     Column {

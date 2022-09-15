@@ -51,10 +51,11 @@ import androidx.compose.ui.unit.dp
 import me.kifio.organize.Platform
 import me.kifio.organize.presentation.AboutViewModel
 import me.kifio.organize.screenInfo
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun AboutView(
-    viewModel: AboutViewModel = AboutViewModel(),
+    viewModel: AboutViewModel = getViewModel(),
     onUpButtonClick: () -> Unit
 ) {
     Column {

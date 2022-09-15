@@ -48,12 +48,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import koin
 import me.kifio.organize.Platform
 import me.kifio.organize.presentation.AboutViewModel
 import me.kifio.organize.screenInfo
 
 @Composable
-fun AboutView(viewModel: AboutViewModel = AboutViewModel()) {
+fun AboutView(viewModel: AboutViewModel = koin.get()) {
     ContentView(viewModel.items)
 }
 

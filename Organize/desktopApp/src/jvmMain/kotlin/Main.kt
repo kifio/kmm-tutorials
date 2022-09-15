@@ -45,12 +45,19 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import me.kifio.organize.Modules.initKoin
 import me.kifio.organize.presentation.Screen
+import org.koin.core.Koin
 import ui.about.AboutView
 import ui.reminders.RemindersView
 import ui.theme.AppTheme
 
+lateinit var koin: Koin
+
 fun main() {
+
+  koin = initKoin().koin
+
   return application {
     var screenState by remember { mutableStateOf(Screen.Reminders) }
 

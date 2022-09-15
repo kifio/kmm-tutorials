@@ -32,29 +32,26 @@
  * THE SOFTWARE.
  */
 
-package me.kifio.organize.android
+package me.kifio.organize
 
-import android.app.Application
+import kotlinx.cinterop.ExportObjCClass
+import kotlinx.cinterop.ObjCClass
+import kotlinx.cinterop.getOriginalKotlinClass
 import me.kifio.organize.Modules.initKoin
-import me.kifio.organize.presentation.AboutViewModel
-import me.kifio.organize.presentation.RemindersViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.dsl.module
+import org.koin.core.Koin
+import org.koin.core.KoinApplication
+import org.koin.core.qualifier.Qualifier
 
-class OrganizeApp : Application() {
+object KoinIOS {
+    fun initialize(): KoinApplication = initKoin()
 
-    override fun onCreate() {
-        super.onCreate()
+    fun Koin.get(objCClass: ObjCClass): Any {
+        val kClazz = getOriginalKotlinClass(objCClass) ?: throw IllegalStateException()
+        return get(kClazz, null, null)
+    }
 
-        initKoin(
-            viewModelsModule = module {
-                viewModel {
-                    RemindersViewModel(get())
-                }
-                viewModel {
-                    AboutViewModel(get())
-                }
-            }
-        )
+    fun Koin.get(objCClass: ObjCClass, qualifier: Qualifier?, parameter: Any): Any {
+        val kClazz = getOriginalKotlinClass(objCClass) ?: throw IllegalStateException()
+        return get(kClazz, null, null)
     }
 }

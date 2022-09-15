@@ -56,6 +56,7 @@ kotlin {
             dependencies {
                 implementation(project(":shared"))
                 implementation(compose.desktop.currentOs)
+                implementation("io.insert-koin:koin-core:${rootProject.extra["koinVersion"]}")
             }
         }
 
