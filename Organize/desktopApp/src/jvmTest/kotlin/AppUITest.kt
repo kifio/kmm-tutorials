@@ -32,52 +32,61 @@
  * THE SOFTWARE.
  */
 
-
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowState
-import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import me.kifio.organize.presentation.Screen
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import ui.about.AboutView
 import ui.reminders.RemindersView
-import ui.theme.AppTheme
 
-fun main() {
-  return application {
-    var screenState by remember { mutableStateOf(Screen.Reminders) }
+class AppUITest {
+  @get:Rule
+  val composeTestRule = createComposeRule()
 
-    AppTheme {
-      Window(
-        title = "Organize",
-        state = rememberWindowState(width = 400.dp, height = 550.dp),
-        resizable = true,
-        onCloseRequest = ::exitApplication,
-      ) {
-        RemindersView(
-          onAboutIconClick = { screenState = Screen.AboutDevice }
-        )
-      }
+  @Before
+  fun setUp() {
+    composeTestRule.setContent {
+      var screenState by remember { mutableStateOf(Screen.Reminders) }
 
-      if (screenState == Screen.AboutDevice) {
-        Window(
-          title = "About Device",
-          state = WindowState(width = 300.dp, height = 450.dp),
-          resizable = true,
-          onCloseRequest = {
-            screenState = Screen.Reminders
-          },
-        ) {
-          AboutView()
-        }
+      when (screenState) {
+        Screen.Reminders ->
+          RemindersView(
+            onAboutIconClick = { screenState = Screen.AboutDevice }
+          )
+        Screen.AboutDevice -> AboutView()
       }
     }
+  }
+
+  @Test
+  fun testAboutButtonExistence() {
+    composeTestRule
+      .onNodeWithContentDescription("aboutButton")
+      .assertExists()
+  }
+
+  @Test
+  fun testOpeningAboutPage() {
+    composeTestRule
+      .onNodeWithText("Reminders")
+      .assertExists()
+
+    composeTestRule
+      .onNodeWithContentDescription("aboutButton")
+      .performClick()
+
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithContentDescription("aboutView")
+      .assertExists()
   }
 }

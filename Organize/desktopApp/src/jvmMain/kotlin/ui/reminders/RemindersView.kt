@@ -53,6 +53,8 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -64,137 +66,139 @@ import me.kifio.organize.presentation.RemindersViewModel
 
 @Composable
 fun RemindersView(
-  remindersViewModel: RemindersViewModel = RemindersViewModel(),
-  onAboutIconClick: () -> Unit,
+    remindersViewModel: RemindersViewModel = RemindersViewModel(),
+    onAboutIconClick: () -> Unit,
 ) {
-  Column {
-    Toolbar(onAboutIconClick = onAboutIconClick)
-    ContentView(remindersViewModel)
-  }
+    Column {
+        Toolbar(onAboutIconClick = onAboutIconClick)
+        ContentView(remindersViewModel)
+    }
 }
 
 @Composable
 private fun Toolbar(
-  onAboutIconClick: () -> Unit,
+    onAboutIconClick: () -> Unit,
 ) {
-  TopAppBar(
-    title = { Text(text = "Reminders") },
-    actions = {
-      IconButton(onClick = onAboutIconClick) {
-        Icon(
-          imageVector = Icons.Outlined.Info,
-          contentDescription = "About Device Button",
-        )
-      }
-    }
-  )
+    TopAppBar(
+        title = { Text(text = "Reminders") },
+        actions = {
+            IconButton(
+                onClick = onAboutIconClick,
+                modifier = Modifier.semantics { contentDescription = "aboutButton" }) {
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = "About Device Button",
+                )
+            }
+        }
+    )
 }
 
 @Composable
 private fun ContentView(viewModel: RemindersViewModel) {
-  var textFieldValue by remember { mutableStateOf("") }
+    var textFieldValue by remember { mutableStateOf("") }
 
-  var reminders by remember {
-    mutableStateOf(listOf<Reminder>(), policy = neverEqualPolicy())
-  }
-
-  viewModel.onRemindersUpdated = {
-    reminders = it
-  }
-
-  LazyColumn(modifier = Modifier.fillMaxSize()) {
-    items(items = reminders) { item ->
-      val onItemClick = {
-        viewModel.markReminder(id = item.id, isCompleted = !item.isCompleted)
-      }
-
-      ReminderItem(
-        title = item.title,
-        isCompleted = item.isCompleted,
-        modifier = Modifier
-          .fillMaxWidth()
-          .clickable(enabled = true, onClick = onItemClick)
-          .padding(horizontal = 16.dp, vertical = 4.dp)
-      )
+    var reminders by remember {
+        mutableStateOf(listOf<Reminder>(), policy = neverEqualPolicy())
     }
 
-    item {
-      val onSubmit = {
-        viewModel.createReminder(title = textFieldValue)
-        textFieldValue = ""
-      }
-
-      NewReminderTextField(
-        value = textFieldValue,
-        onValueChange = { textFieldValue = it },
-        onSubmit = onSubmit,
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(vertical = 8.dp, horizontal = 16.dp)
-      )
+    viewModel.onRemindersUpdated = {
+        reminders = it
     }
-  }
+
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(items = reminders) { item ->
+            val onItemClick = {
+                viewModel.markReminder(id = item.id, isCompleted = !item.isCompleted)
+            }
+
+            ReminderItem(
+                title = item.title,
+                isCompleted = item.isCompleted,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(enabled = true, onClick = onItemClick)
+                    .padding(horizontal = 16.dp, vertical = 4.dp)
+            )
+        }
+
+        item {
+            val onSubmit = {
+                viewModel.createReminder(title = textFieldValue)
+                textFieldValue = ""
+            }
+
+            NewReminderTextField(
+                value = textFieldValue,
+                onValueChange = { textFieldValue = it },
+                onSubmit = onSubmit,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
+            )
+        }
+    }
 }
 
 @Composable
 private fun ReminderItem(
-  title: String,
-  isCompleted: Boolean,
-  modifier: Modifier = Modifier,
+    title: String,
+    isCompleted: Boolean,
+    modifier: Modifier = Modifier,
 ) {
-  Row(
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.Start,
-    modifier = modifier
-  ) {
-    RadioButton(
-      selected = isCompleted,
-      onClick = null
-    )
-
-    Text(
-      text = title,
-      style = if (isCompleted) {
-        MaterialTheme.typography.body1.copy(
-          textDecoration = TextDecoration.LineThrough,
-          fontStyle = FontStyle.Italic,
-          color = Color.Gray,
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start,
+        modifier = modifier
+    ) {
+        RadioButton(
+            selected = isCompleted,
+            onClick = null
         )
-      } else {
-        MaterialTheme.typography.body1
-      },
-      modifier = Modifier.padding(8.dp),
-    )
-  }
+
+        Text(
+            text = title,
+            style = if (isCompleted) {
+                MaterialTheme.typography.body1.copy(
+                    textDecoration = TextDecoration.LineThrough,
+                    fontStyle = FontStyle.Italic,
+                    color = Color.Gray,
+                )
+            } else {
+                MaterialTheme.typography.body1
+            },
+            modifier = Modifier.padding(8.dp),
+        )
+    }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun NewReminderTextField(
-  value: String,
-  onValueChange: (String) -> Unit,
-  onSubmit: () -> Unit,
-  modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    onSubmit: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-  OutlinedTextField(
-    value = value,
-    onValueChange = onValueChange,
-    placeholder = { Text("Add a new reminder here") },
-    keyboardOptions = KeyboardOptions.Default.copy(
-      capitalization = KeyboardCapitalization.Words,
-      keyboardType = KeyboardType.Text,
-      imeAction = ImeAction.Done,
-    ),
-    keyboardActions = KeyboardActions(
-      onDone = { onSubmit() }
-    ),
-    modifier = modifier
-      .onPreviewKeyEvent { event: KeyEvent ->
-        if (event.key == Key.Enter) {
-          onSubmit()
-          return@onPreviewKeyEvent true
-        }
-        false
-      }
-  )
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = { Text("Add a new reminder here") },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            capitalization = KeyboardCapitalization.Words,
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Done,
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = { onSubmit() }
+        ),
+        modifier = modifier
+            .onPreviewKeyEvent { event: KeyEvent ->
+                if (event.key == Key.Enter) {
+                    onSubmit()
+                    return@onPreviewKeyEvent true
+                }
+                false
+            }
+    )
 }

@@ -92,6 +92,13 @@ kotlin {
         val desktopMain by getting {
             dependsOn(commonMain)
         }
+
+        val desktopTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
+                implementation("junit:junit:4.13.2")
+            }
+        }
     }
 }
 

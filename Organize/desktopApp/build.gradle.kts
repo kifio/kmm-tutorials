@@ -36,60 +36,68 @@ import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-  kotlin("multiplatform") // kotlin("jvm") doesn't work well in IDEA/AndroidStudio (https://github.com/JetBrains/compose-jb/issues/22)
-  id("org.jetbrains.compose")
+    kotlin("multiplatform") // kotlin("jvm") doesn't work well in IDEA/AndroidStudio (https://github.com/JetBrains/compose-jb/issues/22)
+    id("org.jetbrains.compose")
 }
 
 group = "me.kifio.organize"
 version = "1.0.0"
 
 kotlin {
-  jvm {
-    withJava()
-  }
-
-  sourceSets {
-    named("jvmMain") {
-      kotlin.srcDirs("src/jvmMain/kotlin")
-      resources.srcDirs("src/jvmMain/resources")
-
-      dependencies {
-        implementation(project(":shared"))
-        implementation(compose.desktop.currentOs)
-      }
+    jvm {
+        withJava()
     }
-  }
+
+    sourceSets {
+        named("jvmMain") {
+            kotlin.srcDirs("src/jvmMain/kotlin")
+            resources.srcDirs("src/jvmMain/resources")
+
+            dependencies {
+                implementation(project(":shared"))
+                implementation(compose.desktop.currentOs)
+            }
+        }
+
+        named("jvmTest") {
+            dependencies {
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.uiTestJUnit4)
+                implementation(compose.desktop.currentOs)
+            }
+        }
+    }
 }
 
 compose.desktop {
-  application {
-    mainClass = "MainKt"
+    application {
+        mainClass = "MainKt"
 
-    nativeDistributions {
-      val resources = project.layout.projectDirectory.dir("src/jvmMain/resources")
+        nativeDistributions {
+            val resources = project.layout.projectDirectory.dir("src/jvmMain/resources")
 
-      targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-      appResourcesRootDir.set(resources)
-      packageName = "Organize"
-      packageVersion = "1.0.0"
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            appResourcesRootDir.set(resources)
+            packageName = "Organize"
+            packageVersion = "1.0.0"
 
-      macOS {
-        // Use -Pcompose.desktop.mac.sign=true to sign and notarize.
-        bundleID = "me.kifio.organize.desktop"
-        iconFile.set(resources.file("macos-icon.icns"))
-      }
+            macOS {
+                // Use -Pcompose.desktop.mac.sign=true to sign and notarize.
+                bundleID = "me.kifio.organize.desktop"
+                iconFile.set(resources.file("macos-icon.icns"))
+            }
 
-      windows {
-        iconFile.set(resources.file("windows-icon.ico"))
-      }
+            windows {
+                iconFile.set(resources.file("windows-icon.ico"))
+            }
 
-      linux {
-        iconFile.set(resources.file("linux-icon.png"))
-      }
+            linux {
+                iconFile.set(resources.file("linux-icon.png"))
+            }
+        }
     }
-  }
 }
 
 tasks.named<Copy>("jvmProcessResources") {
-  duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
