@@ -7,4 +7,5 @@
 ![image](https://github.com/kifio/kmm-tutorials/blob/master/FindTime/Preview-Desktop.png)
 
 # Organize
-Работа с плтформозависимым кодом. expect/actual классы.
+Работа с платформозависимым кодом. expect/actual классы.
+DI, Preferences/UserDefaults. Database (не закончил в этом примере)
