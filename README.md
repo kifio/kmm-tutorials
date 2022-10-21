@@ -4,8 +4,10 @@
 
 # FindTime
 Азы. Модульность, buildSrc, работа с зависимостями.
-![image](https://github.com/kifio/kmm-tutorials/blob/master/FindTime/Preview-Desktop.png)
 
 # Organize
 Работа с платформозависимым кодом. expect/actual классы.
 DI, Preferences/UserDefaults. Database (не закончил в этом примере)
+
+# Learn
+Serialization, Networking & Concurrency (последние 2 пункта пролистал, т.к. уже разобрался с ktor и coroutines-mt в рамках другого приложения)
